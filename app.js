@@ -1,279 +1,295 @@
-:root{
-  --bg:#0b1220;
-  --card:#111a2e;
-  --text:#e8eefc;
-  --muted:#a9b4d6;
-  --line:rgba(255,255,255,.10);
-  --brand:#7aa2ff;
-  --brand2:#9bdcff;
-  --btn:#86a7ff;
-  --btnText:#0b1220;
-  --shadow: 0 10px 30px rgba(0,0,0,.35);
-  --radius:16px;
+// PhotoToolsMax - app.js
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("fileInput");
+const selectBtn = document.getElementById("selectBtn");
+
+const targetKB = document.getElementById("targetKB");
+const maxWidth = document.getElementById("maxWidth");
+const outFormat = document.getElementById("outFormat");
+
+const compressBtn = document.getElementById("compressBtn");
+const clearBtn = document.getElementById("clearBtn");
+
+const statusLine = document.getElementById("statusLine");
+const countLine = document.getElementById("countLine");
+const progressBar = document.getElementById("progressBar");
+const list = document.getElementById("list");
+
+const selectedInfo = document.getElementById("selectedInfo");
+const themeBtn = document.getElementById("themeBtn");
+
+let selectedFiles = [];
+
+// ---------- Helpers ----------
+function formatBytes(bytes) {
+  const kb = bytes / 1024;
+  if (kb < 1024) return `${kb.toFixed(1)} KB`;
+  const mb = kb / 1024;
+  return `${mb.toFixed(2)} MB`;
 }
 
-html,body{height:100%;}
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: radial-gradient(1200px 700px at 20% -10%, rgba(122,162,255,.25), transparent 60%),
-              radial-gradient(900px 600px at 90% 10%, rgba(155,220,255,.18), transparent 60%),
-              var(--bg);
-  color:var(--text);
+function setStatus(text) {
+  statusLine.textContent = `Result: ${text}`;
 }
 
-a{color:inherit; text-decoration:none;}
-.container{max-width:1100px; margin:0 auto; padding:0 16px;}
-.mt{margin-top:16px;}
-.mt8{margin-top:8px;}
-
-.topbar{
-  position:sticky; top:0; z-index:50;
-  background: rgba(11,18,32,.78);
-  backdrop-filter: blur(10px);
-  border-bottom:1px solid var(--line);
-}
-.topbarInner{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 0;
-}
-.brand{display:flex; align-items:center; gap:10px;}
-.logo{
-  width:42px; height:42px; border-radius:14px;
-  display:grid; place-items:center;
-  background: linear-gradient(135deg, rgba(122,162,255,.35), rgba(155,220,255,.25));
-  border:1px solid rgba(255,255,255,.15);
-  font-weight:800;
-}
-.brandTitle{font-weight:800; letter-spacing:.2px;}
-.brandSub{font-size:12px; color:var(--muted);}
-
-.nav{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
-.navLink{
-  padding:8px 10px; border-radius:12px;
-  border:1px solid transparent;
-  color:var(--muted);
-  font-size:14px;
-}
-.navLink:hover{border-color:rgba(255,255,255,.14); color:var(--text);}
-.navLink.active{color:var(--text); border-color:rgba(122,162,255,.35); background: rgba(122,162,255,.10);}
-
-.iconBtn{
-  width:42px; height:42px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  color:var(--text);
-  cursor:pointer;
+function setProgress(pct) {
+  progressBar.style.width = `${pct}%`;
 }
 
-.hero{
-  display:grid;
-  grid-template-columns: 1.5fr .9fr;
-  gap:16px;
-  padding:18px 0 10px;
-}
-.hero h1{margin:8px 0 8px; font-size:28px; line-height:1.15;}
-.muted{color:var(--muted);}
-.small{font-size:12px;}
-.heroBadges{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;}
-.badge{
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  font-size:12px;
-  color:var(--text);
+function updateSelectedInfo() {
+  if (!selectedInfo) return;
+
+  if (!selectedFiles || selectedFiles.length === 0) {
+    selectedInfo.textContent = "No file selected";
+    return;
+  }
+
+  if (selectedFiles.length === 1) {
+    const f = selectedFiles[0];
+    selectedInfo.textContent = `Selected: ${f.name} (${formatBytes(f.size)})`;
+  } else {
+    let total = 0;
+    for (const f of selectedFiles) total += f.size;
+    selectedInfo.textContent = `Selected: ${selectedFiles.length} files (${formatBytes(total)})`;
+  }
 }
 
-.grid{
-  display:grid;
-  grid-template-columns: 1.6fr .9fr;
-  gap:16px;
-  align-items:start;
-  padding:10px 0 30px;
+function clearAll() {
+  selectedFiles = [];
+  fileInput.value = "";
+  list.innerHTML = "";
+  countLine.textContent = "";
+  setProgress(0);
+  setStatus("—");
+  updateSelectedInfo();
 }
 
-.card{
-  background: rgba(17,26,46,.86);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding:16px;
-}
-.cardHead{
-  display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
-  margin-bottom:10px;
-}
-.cardHead h2{margin:0; font-size:18px;}
-.pill{
-  font-size:12px;
-  padding:6px 10px;
-  border-radius:999px;
-  background: rgba(155,220,255,.12);
-  border:1px solid rgba(155,220,255,.22);
-  color: var(--text);
+// ---------- Theme ----------
+(function initTheme() {
+  const key = "pt_theme";
+  const saved = localStorage.getItem(key);
+  if (saved === "light") document.body.classList.add("light");
+  themeBtn.textContent = document.body.classList.contains("light") ? "☀" : "☾";
+
+  themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    localStorage.setItem(key, document.body.classList.contains("light") ? "light" : "dark");
+    themeBtn.textContent = document.body.classList.contains("light") ? "☀" : "☾";
+  });
+})();
+
+// Light theme (small)
+const style = document.createElement("style");
+style.textContent = `
+  body.light{
+    --bg:#f6f8ff;
+    --card:#ffffff;
+    --text:#0b1220;
+    --muted:#44506a;
+    --line:rgba(0,0,0,.10);
+    --shadow: 0 10px 30px rgba(20,40,120,.10);
+  }
+`;
+document.head.appendChild(style);
+
+// ---------- Events ----------
+selectBtn.addEventListener("click", () => fileInput.click());
+
+fileInput.addEventListener("change", () => {
+  selectedFiles = Array.from(fileInput.files || []);
+  // Limit size (soft)
+  const over = selectedFiles.find(f => f.size > 20 * 1024 * 1024);
+  if (over) {
+    alert("Max recommended image size is 20MB. Please choose smaller images.");
+  }
+  updateSelectedInfo();
+  setStatus(selectedFiles.length ? "Files selected" : "—");
+  countLine.textContent = selectedFiles.length ? `${selectedFiles.length} file(s) selected` : "";
+});
+
+dropZone.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropZone.classList.add("drag");
+});
+dropZone.addEventListener("dragleave", () => dropZone.classList.remove("drag"));
+dropZone.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropZone.classList.remove("drag");
+  const files = Array.from(e.dataTransfer.files || []).filter(f => f.type.startsWith("image/"));
+  if (files.length) {
+    selectedFiles = files;
+    updateSelectedInfo();
+    setStatus("Files selected");
+    countLine.textContent = `${selectedFiles.length} file(s) selected`;
+  }
+});
+
+clearBtn.addEventListener("click", clearAll);
+
+// ---------- Core Compression ----------
+async function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = URL.createObjectURL(file);
+  });
 }
 
-.drop{
-  border:2px dashed rgba(255,255,255,.20);
-  border-radius: 18px;
-  padding:14px;
-  background: rgba(255,255,255,.04);
-  position:relative;
-  overflow:hidden;
-}
-.drop input[type="file"]{
-  position:absolute; inset:0;
-  opacity:0; cursor:pointer;
-}
-.dropInner{display:flex; flex-direction:column; gap:6px;}
-.dropTitle{font-weight:800; font-size:16px;}
-.dropSub{font-size:13px; color:var(--muted);}
-.btn{
-  margin-top:8px;
-  padding:12px 14px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.07);
-  color:var(--text);
-  cursor:pointer;
-  font-weight:700;
-}
-.btn:hover{filter:brightness(1.06);}
-.btnPrimary{
-  background: linear-gradient(135deg, rgba(122,162,255,.95), rgba(155,220,255,.85));
-  color: var(--btnText);
-  border-color: rgba(255,255,255,.08);
-}
-.btnGhost{
-  background: rgba(255,255,255,.04);
+function canvasToBlob(canvas, mime, quality) {
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => resolve(blob), mime, quality);
+  });
 }
 
-.row{
-  display:grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap:12px;
-  margin-top:14px;
-}
-.field span{display:block; font-size:12px; color:var(--muted); margin-bottom:6px;}
-.field input, .field select{
-  width:100%;
-  padding:12px 12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(11,18,32,.35);
-  color:var(--text);
-  outline:none;
-}
-.hint{color:rgba(255,255,255,.55); font-weight:600;}
+async function compressOne(file, targetBytes, mime, maxW) {
+  const img = await loadImage(file);
 
-.result{margin-top:14px;}
-.statusLine{display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap;}
-.progressWrap{
-  margin-top:10px;
-  height:10px;
-  border-radius:999px;
-  background: rgba(255,255,255,.08);
-  overflow:hidden;
-}
-.progressBar{
-  height:100%;
-  width:0%;
-  border-radius:999px;
-  background: linear-gradient(90deg, rgba(122,162,255,.9), rgba(155,220,255,.9));
-  transition: width .18s ease;
-}
+  let w = img.naturalWidth;
+  let h = img.naturalHeight;
 
-.list{margin-top:10px; display:flex; flex-direction:column; gap:10px;}
-.item{
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:14px;
-  padding:12px;
-  background: rgba(255,255,255,.04);
-  display:flex;
-  gap:10px;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-}
-.item b{font-size:14px;}
-.item .meta{font-size:12px; color:var(--muted);}
-.item a{
-  padding:10px 12px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(255,255,255,.06);
-  font-weight:800;
+  // Apply max width (if given)
+  if (maxW && maxW > 0 && w > maxW) {
+    const ratio = maxW / w;
+    w = Math.round(w * ratio);
+    h = Math.round(h * ratio);
+  }
+
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(img, 0, 0, w, h);
+
+  // PNG doesn't support quality like JPG/WEBP; for PNG we will still try but size may be big
+  let quality = 0.92;
+  let blob = await canvasToBlob(canvas, mime, quality);
+
+  // If target is very low, binary search quality
+  // Stop conditions for safety
+  const maxIter = 18;
+
+  if (mime === "image/png") {
+    // For PNG, we can't control quality well; return early
+    return { blob, width: w, height: h };
+  }
+
+  // If already smaller than target, return
+  if (blob && blob.size <= targetBytes) return { blob, width: w, height: h };
+
+  let low = 0.20;
+  let high = 0.92;
+  let best = blob;
+
+  for (let i = 0; i < maxIter; i++) {
+    const mid = (low + high) / 2;
+    const b = await canvasToBlob(canvas, mime, mid);
+    if (!b) break;
+
+    if (b.size > targetBytes) {
+      high = mid;
+    } else {
+      best = b;
+      low = mid;
+    }
+  }
+
+  return { blob: best, width: w, height: h };
 }
 
-.note{
-  margin-top:14px;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(155,220,255,.06);
-  color:var(--text);
-  font-size:13px;
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
 }
 
-.adCard{
-  background: rgba(17,26,46,.72);
-  border:1px solid rgba(255,255,255,.10);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding:16px;
-}
-.adTitle{font-size:12px; color:var(--muted); margin-bottom:10px; letter-spacing:.4px; text-transform:uppercase;}
-.adBox{
-  border:2px dashed rgba(255,255,255,.18);
-  border-radius:16px;
-  height:170px;
-  display:grid; place-items:center;
-  background: rgba(255,255,255,.04);
-}
+function renderItem(originalFile, outBlob, dims, idx, total) {
+  const ext = outBlob.type.includes("webp") ? "webp" : outBlob.type.includes("png") ? "png" : "jpg";
+  const outName = originalFile.name.replace(/\.[^.]+$/, "") + `-ptm.${ext}`;
 
-.inlineAdWrap{
-  margin-top:12px;
-  padding:12px;
-  border-radius:16px;
-  border:1px solid rgba(255,255,255,.10);
-  background: rgba(255,255,255,.03);
-}
+  const div = document.createElement("div");
+  div.className = "item";
 
-.divider{height:1px; background: var(--line); margin:14px 0;}
-.cleanList{padding-left:18px; margin:10px 0 0;}
-.cleanList li{margin:6px 0; color: var(--text);}
-.tags{display:flex; flex-wrap:wrap; gap:8px;}
-.tags span{
-  font-size:12px;
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.12);
-  background: rgba(255,255,255,.05);
-  color: var(--text);
+  const left = document.createElement("div");
+  const title = document.createElement("b");
+  title.textContent = outName;
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  meta.textContent =
+    `Original: ${formatBytes(originalFile.size)} → Output: ${formatBytes(outBlob.size)} • ${dims.width}×${dims.height}`;
+
+  left.appendChild(title);
+  left.appendChild(meta);
+
+  const btn = document.createElement("a");
+  btn.href = "#";
+  btn.textContent = "Download";
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    downloadBlob(outBlob, outName);
+  });
+
+  div.appendChild(left);
+  div.appendChild(btn);
+
+  list.appendChild(div);
 }
 
-.steps{margin:10px 0 0; padding-left:18px;}
-.steps li{margin:6px 0; color: var(--text);}
+compressBtn.addEventListener("click", async () => {
+  if (!selectedFiles || selectedFiles.length === 0) {
+    alert("Please select at least 1 image.");
+    return;
+  }
 
-.faq{border:1px solid rgba(255,255,255,.10); border-radius:14px; padding:10px 12px; background: rgba(255,255,255,.03); margin-top:10px;}
-.faq summary{cursor:pointer; font-weight:800;}
-.faq p{margin:10px 0 0;}
+  list.innerHTML = "";
+  setProgress(0);
+  setStatus("Processing...");
 
-.footer{
-  border-top:1px solid var(--line);
-  margin-top:24px;
-  padding:16px 0;
-  background: rgba(11,18,32,.55);
-}
-.footerInner{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;}
-.footerLinks{display:flex; gap:12px; flex-wrap:wrap;}
-.footerLinks a{color:var(--muted); font-size:14px;}
-.footerLinks a:hover{color:var(--text);}
+  const target = Math.max(10, parseInt(targetKB.value || "200", 10));
+  const targetBytes = target * 1024;
 
-@media (max-width: 920px){
-  .hero{grid-template-columns:1fr;}
-  .grid{grid-template-columns:1fr;}
-  .row{grid-template-columns:1fr;}
-}
+  const mw = parseInt(maxWidth.value || "0", 10);
+  const mime = outFormat.value || "image/jpeg";
+
+  countLine.textContent = `Processing ${selectedFiles.length} image(s)...`;
+
+  try {
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const f = selectedFiles[i];
+
+      // Soft limit
+      if (f.size > 20 * 1024 * 1024) {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `<div><b>Skipped: ${f.name}</b><div class="meta">File too large (>20MB)</div></div>`;
+        list.appendChild(div);
+        continue;
+      }
+
+      const res = await compressOne(f, targetBytes, mime, mw);
+      if (res && res.blob) {
+        renderItem(f, res.blob, { width: res.width, height: res.height }, i + 1, selectedFiles.length);
+      }
+
+      const pct = Math.round(((i + 1) / selectedFiles.length) * 100);
+      setProgress(pct);
+      setStatus(`${pct}% done`);
+      countLine.textContent = `Done ${i + 1}/${selectedFiles.length}`;
+    }
+
+    setStatus("Completed ✅");
+  } catch (err) {
+    console.error(err);
+    setStatus("Error ❌");
+    alert("Something went wrong. Please try another image or change settings.");
+  }
+});
+
+// Init
+clearAll();
