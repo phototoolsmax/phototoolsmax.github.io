@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About - PhotoToolsMax</title>
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://phototoolsmax.github.io/phototoolmax/about.html" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbarInner">
+      <a class="brand" href="./"><div class="logo">PT</div><div class="brandText"><div class="brandTitle">PhotoToolsMax</div><div class="brandSub">Image Tools (No Upload)</div></div></a>
+      <nav class="nav">
+        <a class="navLink" href="./">Home</a>
+        <a class="navLink active" href="./about.html">About</a>
+        <a class="navLink" href="./contact.html">Contact</a>
+        <a class="navLink" href="./privacy-policy.html">Privacy</a>
+      </nav>
+      <button class="iconBtn" id="themeBtn" type="button">☾</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card mt">
+      <h1>About PhotoToolsMax</h1>
+      <p class="muted">
+        PhotoToolsMax provides free online tools to compress, convert, and resize images.
+        Your files are processed locally in your browser (no upload).
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footerInner">
+      <div>© <span id="year"></span> PhotoToolsMax</div>
+      <div class="footerLinks">
+        <a href="./privacy-policy.html">Privacy</a>
+        <a href="./contact.html">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+</body>
+</html>
