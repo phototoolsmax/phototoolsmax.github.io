@@ -1,3 +1,63 @@
+const fileInput = document.getElementById("fileInput");
+const selectBtn = document.getElementById("selectBtn");
+const dropZone = document.getElementById("dropZone");
+const selectedInfo = document.getElementById("selectedInfo");
+const listEl = document.getElementById("list");
+
+let selectedFiles = [];
+
+function formatBytes(bytes) {
+  const kb = bytes / 1024;
+  const mb = kb / 1024;
+
+  if (mb >= 1) return mb.toFixed(2) + " MB";
+  if (kb >= 1) return kb.toFixed(0) + " KB";
+  return bytes + " B";
+}
+
+function showSelectedFiles(files) {
+
+  selectedFiles = Array.from(files);
+
+  let total = 0;
+  let html = "";
+
+  selectedFiles.forEach((file, index) => {
+
+    total += file.size;
+
+    html += `
+      <div style="padding:8px;border:1px solid #ddd;margin:5px;border-radius:8px;">
+        ${index+1}. ${file.name} <br>
+        Size: ${formatBytes(file.size)}
+      </div>
+    `;
+
+  });
+
+  selectedInfo.innerText =
+    "Selected: " + selectedFiles.length +
+    " image(s) • Total: " + formatBytes(total);
+
+  listEl.innerHTML = html;
+}
+
+selectBtn.addEventListener("click", function(){
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", function(){
+  showSelectedFiles(fileInput.files);
+});
+
+dropZone.addEventListener("drop", function(e){
+
+  e.preventDefault();
+
+  showSelectedFiles(e.dataTransfer.files);
+
+});
+
 const $ = (id) => document.getElementById(id);
 
 const fileInput = $("fileInput");
