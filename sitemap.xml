@@ -2,25 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://phototoolsmax.github.io/phototoolmax/</loc>
+    <loc>https://phototoolsmax.github.io/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
-    <loc>https://phototoolsmax.github.io/phototoolmax/privacy-policy.html</loc>
+    <loc>https://phototoolsmax.github.io/privacy-policy.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://phototoolsmax.github.io/phototoolmax/about.html</loc>
+    <loc>https://phototoolsmax.github.io/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://phototoolsmax.github.io/phototoolmax/contact.html</loc>
+    <loc>https://phototoolsmax.github.io/contact.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
