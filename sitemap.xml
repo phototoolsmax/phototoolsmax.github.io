@@ -26,3 +26,8 @@
   </url>
 
 </urlset>
+<url>
+  <loc>https://phototoolsmax.github.io/jpg-to-pdf.html</loc>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
