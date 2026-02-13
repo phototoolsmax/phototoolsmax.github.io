@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JPG to PDF Converter - PhotoToolsMax</title>
+
+<style>
+
+body{
+  margin:0;
+  font-family:Arial;
+  background:#f1f3f4;
+}
+
+/* Dashboard Menu */
+.menu{
+  background:#1a73e8;
+  padding:15px;
+  color:white;
+  display:flex;
+  justify-content:space-between;
+}
+
+.menu a{
+  color:white;
+  margin:0 10px;
+  text-decoration:none;
+}
+
+/* Tool Box */
+
+.container{
+  max-width:500px;
+  margin:50px auto;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.2);
+  text-align:center;
+}
+
+button{
+  background:#1a73e8;
+  color:white;
+  border:none;
+  padding:12px 20px;
+  border-radius:5px;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+button:hover{
+  background:#1558b0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- Dashboard Menu -->
+<div class="menu">
+
+<div><b>PhotoToolsMax</b></div>
+
+<div>
+
+<a href="index.html">Home</a>
+<a href="#">More Tools</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+<a href="privacy.html">Privacy Policy</a>
+
+</div>
+
+</div>
+
+
+<!-- Tool Section -->
+
+<div class="container">
+
+<h2>JPG to PDF Converter</h2>
+
+<p>Select JPG images and convert into PDF</p>
+
+<input type="file" id="imageInput" accept="image/jpeg" multiple>
+
+<br>
+
+<button onclick="convertPDF()">Convert to PDF</button>
+
+</div>
+
+
+<!-- Script -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+
+async function convertPDF(){
+
+const { jsPDF } = window.jspdf;
+
+const pdf = new jsPDF();
+
+const files = document.getElementById("imageInput").files;
+
+if(files.length == 0){
+
+alert("Select JPG image");
+
+return;
+
+}
+
+for(let i=0;i<files.length;i++){
+
+const reader = new FileReader();
+
+await new Promise(resolve => {
+
+reader.onload = function(e){
+
+const img = new Image();
+
+img.src = e.target.result;
+
+img.onload = function(){
+
+const width = pdf.internal.pageSize.getWidth();
+
+const height = (img.height * width) / img.width;
+
+if(i>0) pdf.addPage();
+
+pdf.addImage(img,'JPEG',0,0,width,height);
+
+resolve();
+
+}
+
+}
+
+reader.readAsDataURL(files[i]);
+
+});
+
+}
+
+pdf.save("PhotoToolsMax.pdf");
+
+}
+
+</script>
+
+
+</body>
+</html>
 
