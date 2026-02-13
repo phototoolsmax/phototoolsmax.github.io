@@ -4,25 +4,29 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
 
+  <!-- ✅ Google Site Verification (Search Console) -->
+  <meta name="google-site-verification" content="nCST5rhOeHFS49ShAr0HQaLM2f1FrzQLeKGMxkVpDgc" />
+
   <!-- ✅ SEO -->
-  <title>PhotoToolsMax - Compress Image to KB Online (MB to KB)</title>
+  <title>PhotoToolsMax - Compress Image to Target KB Online (MB to KB)</title>
   <meta name="description" content="PhotoToolsMax: Compress images to target KB, convert MB to KB, and resize JPG/PNG/WebP online. Fast, free, and no upload." />
+  <meta name="keywords" content="compress image to kb, mb to kb converter, reduce image size, jpg compressor, png compressor, webp converter, resize image online, photo tools" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://phototoolsmax.github.io/" />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="PhotoToolsMax - Compress Image to KB Online" />
+  <!-- ✅ Open Graph -->
+  <meta property="og:title" content="PhotoToolsMax - Compress Image to Target KB Online" />
   <meta property="og:description" content="Reduce image size from MB to KB directly in your browser. No upload." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://phototoolsmax.github.io/" />
 
   <meta name="twitter:card" content="summary" />
 
-  <!-- ✅ AdSense / Verification (ONLY ONCE) -->
-  <!-- NOTE: If AdSense gave you a different script/snippet later, replace this line with that exact script -->
-  <script async
-    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6732522320437350"
+  <!-- ✅ AdSense Auto Ads (PASTE YOUR ADSENSE CODE HERE IN HEAD) -->
+  <!-- Example (AdSense gives you script like this):
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
     crossorigin="anonymous"></script>
+  -->
 
   <link rel="stylesheet" href="style.css" />
 
@@ -40,7 +44,7 @@
       {
         "@type":"Question",
         "name":"Is it safe? Do you upload my photos?",
-        "acceptedAnswer":{"@type":"Answer","text":"No upload. Images are processed locally in your browser."}
+        "acceptedAnswer":{"@type":"Answer","text":"No. Your images are processed locally in your browser. Nothing is uploaded."}
       },
       {
         "@type":"Question",
@@ -55,7 +59,7 @@
 <body>
   <header class="topbar">
     <div class="container topbarInner">
-      <a class="brand" href="./">
+      <a class="brand" href="./" aria-label="PhotoToolsMax Home">
         <div class="logo">PT</div>
         <div class="brandText">
           <div class="brandTitle">PhotoToolsMax</div>
@@ -63,18 +67,19 @@
         </div>
       </a>
 
-      <nav class="nav">
+      <nav class="nav" aria-label="Primary navigation">
         <a class="navLink active" href="./">Home</a>
         <a class="navLink" href="./about.html">About</a>
         <a class="navLink" href="./contact.html">Contact</a>
         <a class="navLink" href="./privacy-policy.html">Privacy</a>
       </nav>
 
-      <button class="iconBtn" id="themeBtn" type="button" aria-label="Toggle theme">☾</button>
+      <button class="iconBtn" id="themeBtn" type="button" aria-label="Toggle theme">🌙</button>
     </div>
   </header>
 
   <main class="container">
+    <!-- HERO -->
     <section class="hero">
       <div class="heroLeft">
         <h1>Compress Image to Target KB (Free Online)</h1>
@@ -90,10 +95,12 @@
         </div>
       </div>
 
+      <!-- TOP AD SPACE -->
       <aside class="adCard">
         <div class="adTitle">Advertisement</div>
         <div class="adBox">
           <div class="muted">Auto Ads / AdSense ready</div>
+          <!-- OPTIONAL: Place an Ad Unit code here later -->
         </div>
       </aside>
     </section>
@@ -112,12 +119,10 @@
         <div id="dropZone" class="drop">
           <input id="fileInput" type="file" accept="image/*" multiple />
           <div class="dropInner">
-            <div class="dropTitle">Select or Drag & Drop Images Here</div>
-            <div class="dropSub">JPG / PNG / WebP supported • Multiple images</div>
+            <div class="dropTitle" id="dropTitle">Select or Drag & Drop Images Here</div>
+            <div class="dropSub" id="dropSub">JPG / PNG / WebP supported • Multiple images</div>
             <button class="btn" type="button" id="selectBtn">Select Images</button>
-
-            <!-- ✅ Selected file info -->
-            <div id="selectedInfo" class="muted small mt8">No file selected</div>
+            <div class="selectedInfo" id="selectedInfo">No file selected</div>
           </div>
         </div>
 
@@ -160,22 +165,21 @@
           <div id="list" class="list"></div>
         </div>
 
-        <!-- ✅ Download/Result section ke JUST NICHE Ad Space -->
-        <div class="inlineAdWrap">
+        <!-- ✅ IN-PAGE AD SPACE (JUST BELOW DOWNLOAD/RESULT SECTION) -->
+        <div class="inpageAd">
           <div class="adTitle">Advertisement</div>
-
-          <!-- ✅ Manual Ad Unit (optional). Replace YOUR_AD_SLOT_ID with your real slot id -->
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-6732522320437350"
-               data-ad-slot="YOUR_AD_SLOT_ID"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-          <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-
-          <!-- If you use ONLY Auto Ads, you can delete the ins+script above and keep only title -->
+          <div class="adBox">
+            <div class="muted">Place Ad Unit here (after approval)</div>
+            <!-- Example Ad Unit:
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            -->
+          </div>
         </div>
 
         <div class="note">
@@ -189,42 +193,35 @@
         <ul class="cleanList">
           <li>Image Resizer (px)</li>
           <li>JPG to PNG Converter</li>
-          <li>PNG to WEBP Converter</li>
-          <li>WEBP to JPG Converter</li>
-          <li>Passport Size Photo Maker</li>
-          <li>Image Cropper</li>
+          <li>PNG to JPG Converter</li>
+          <li>PNG/JPG to WEBP</li>
+          <li>WEBP to JPG/PNG</li>
+          <li>Image Crop Tool</li>
+          <li>Passport Photo Maker</li>
+          <li>Signature Resize (20KB)</li>
           <li>Bulk Image Compressor</li>
-          <li>Image Optimizer</li>
-          <li>Image to PDF</li>
-          <li>PDF to Image</li>
+          <li>Image Optimizer for Website</li>
         </ul>
 
         <div class="divider"></div>
 
-        <h3>High Traffic Keywords</h3>
+        <h3>Popular Keywords</h3>
         <div class="tags">
           <span>compress image to kb</span>
           <span>mb to kb converter</span>
           <span>reduce image size</span>
-          <span>image compressor online</span>
           <span>jpg compressor</span>
           <span>png compressor</span>
           <span>webp converter</span>
           <span>resize image online</span>
-          <span>compress image 50kb</span>
-          <span>compress image 100kb</span>
-          <span>compress image 200kb</span>
-          <span>passport size photo</span>
-          <span>bulk image compressor</span>
-          <span>image optimizer</span>
-          <span>free image tools</span>
+          <span>photo tools</span>
         </div>
 
         <div class="divider"></div>
 
         <div class="adTitle">Advertisement</div>
         <div class="adBox">
-          <div class="muted">Auto Ads / Ad unit</div>
+          <div class="muted">Sidebar ad space</div>
         </div>
       </aside>
     </section>
@@ -240,6 +237,34 @@
       <p class="muted">Everything runs on your device — your images are not uploaded.</p>
     </section>
 
+    <!-- ✅ KEYWORDS SECTION (BOTTOM, SEO + TRAFFIC) -->
+    <section class="card mt">
+      <h2>High-Traffic Image Tool Keywords</h2>
+      <p class="muted small">These keywords help users discover your tools. (Visible on page + SEO)</p>
+      <div class="tags">
+        <span>compress image to 20kb</span>
+        <span>compress image to 50kb</span>
+        <span>compress image to 100kb</span>
+        <span>compress image to 200kb</span>
+        <span>compress image to 300kb</span>
+        <span>compress image to 500kb</span>
+        <span>reduce image size online</span>
+        <span>mb to kb converter</span>
+        <span>image compressor online</span>
+        <span>jpg to webp</span>
+        <span>webp to jpg</span>
+        <span>png to jpg</span>
+        <span>jpg to png</span>
+        <span>resize image to 1mb</span>
+        <span>passport size photo maker</span>
+        <span>signature resize 20kb</span>
+        <span>bulk image compressor</span>
+        <span>image optimizer</span>
+        <span>photo editor online</span>
+        <span>compress photo for form</span>
+      </div>
+    </section>
+
     <section class="card mt">
       <h2>FAQ</h2>
       <details class="faq" open>
@@ -252,25 +277,8 @@
       </details>
       <details class="faq">
         <summary>Max image size?</summary>
-        <p class="muted">Max 20MB per image (recommended).</p>
+        <p class="muted">Max 20MB per image is recommended.</p>
       </details>
-    </section>
-
-    <!-- ✅ Keywords ko niche show karna (as you asked) -->
-    <section class="card mt">
-      <h2>Popular Image Tools Keywords</h2>
-      <div class="tags">
-        <span>compress image to kb online</span>
-        <span>reduce image size mb to kb</span>
-        <span>image compressor free</span>
-        <span>compress jpeg online</span>
-        <span>compress png online</span>
-        <span>webp converter online</span>
-        <span>resize image without quality loss</span>
-        <span>bulk image compressor online</span>
-        <span>passport photo maker online</span>
-        <span>image optimizer online</span>
-      </div>
     </section>
   </main>
 
@@ -286,6 +294,8 @@
   </footer>
 
   <script src="app.js"></script>
-  <script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
