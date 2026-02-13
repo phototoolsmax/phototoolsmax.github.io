@@ -2,35 +2,63 @@
 <html>
 <head>
 <title>More Tools - PhotoToolsMax</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+
+.toolsGrid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.toolCard{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+text-align:center;
+cursor:pointer;
+}
+
+.toolCard:hover{
+background:#f1f3f4;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header class="topbar">
 <div class="container topbarInner">
-<div class="brand">
 <div class="brandTitle">PhotoToolsMax</div>
-<div class="brandSub">More Free Tools</div>
-</div>
 </div>
 </header>
 
 <main class="container">
 
-<h1>All Tools</h1>
+<h2>All Tools</h2>
 
-<div class="card">
+<div class="toolsGrid">
 
-<a href="jpg-to-pdf.html" class="navLink">
+<a href="index.html" class="toolCard">
+Image Compressor
+</a>
+
+<a href="jpg-to-pdf.html" class="toolCard">
 JPG to PDF Converter
 </a>
 
-<br><br>
+<a href="#" class="toolCard">
+PNG to JPG (Coming Soon)
+</a>
 
-<a href="index.html" class="navLink">
-Image Compressor Tool
+<a href="#" class="toolCard">
+Image Resizer (Coming Soon)
 </a>
 
 </div>
